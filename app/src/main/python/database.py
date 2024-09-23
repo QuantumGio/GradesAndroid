@@ -136,14 +136,14 @@ def return_grade_proportions() -> dict:
 def return_average_by_date() -> list:
     '''funcion that returns averages by date'''
     command = """
-    WITH cumulative_grades AS (
-        SELECT date, grade
+        WITH cumulative_grades AS (
+        SELECT date, grade, weight
         FROM grades
         ORDER BY date
     ),
     cumulative_averages AS (
         SELECT date,
-               (SELECT AVG(grade) 
+               (SELECT SUM(cg2.grade * cg2.weight) / SUM(cg2.weight)
                 FROM cumulative_grades cg2
                 WHERE cg2.date <= cg1.date) AS average_grade
         FROM cumulative_grades cg1
@@ -160,7 +160,7 @@ def return_average_by_date() -> list:
         cursor.execute(command)
         rows = cursor.fetchall()
 
-        result = [{'date': row[0], 'average_grade': row[1]} for row in rows]
+        result = [{'date': row[0], 'average_grade': round(row[1], 2)} for row in rows]
         connection.close()
         return result
 
