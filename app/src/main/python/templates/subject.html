@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{subject}}</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>Grades | {{subject}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/subject/subject.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 </head>
 <body>
+
 <span onclick="goBack()" class="material-symbols-outlined" style="cursor: pointer; user-select:none">
         arrow_back
     </span>
+
 <h1>SUBJECT: {{subject}}</h1>
 <button id="add-grade-button" type="button">Add grade</button>
 

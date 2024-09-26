@@ -3,9 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
         showSection(button);
     });
+
     var formGrade = document.getElementById("add-grade-section");
     formGrade.addEventListener('submit', function (event) {
         event.preventDefault();
+
         var grade = document.getElementById("grade").value;
         var gradeWeight = document.getElementById("grade-weight").value;
         var regex = /^[a-zA-z]+$/;
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.alert("letters detected in the grade or in the grade weight");
             return false;
         };
+
         let submitButton = document.getElementById("submit-button");
         if (submitButton.textContent == "Add grade") {
             var data = {
@@ -30,18 +33,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify(data)
             })
-            .then(function (response) { return response.json(); })
-            .then(function (data) {
-            if (data.message.startsWith('grade added')) {
-                window.alert(data.message);
-                window.location.reload();
-            }
-            else {
-                window.alert(data.message);
-            }
+            .then(res => res.json())
+            .then(data => {
+                if (data.ok) {
+                    window.alert(data.message);
+                    window.location.reload();
+                }
+                else {
+                    window.alert(data.message);
+                }
             })
-            .catch(function (error) { return console.error('error: ', error);
-            });
+            .catch(err => console.error('error: ', err));
         } else {
             sendEditGrade();
         }
@@ -59,6 +61,7 @@ function deleteGrade(id) {
         code: '004',
         id: id
     };
+
     fetch("http://127.0.0.1:5000/" + document.title, {
         method: 'POST',
         headers: {
@@ -66,9 +69,9 @@ function deleteGrade(id) {
         },
         body: JSON.stringify(data)
     })
-    .then(function (response) { return response.json(); })
-    .then(function (data) {
-    if (data.message.startsWith('grade deleted')) {
+    .then(res => res.json())
+    .then(data => {
+    if (data.ok) {
         window.alert(data.message);
         window.location.reload();
     }
@@ -76,7 +79,7 @@ function deleteGrade(id) {
         window.alert(data.message);
     }
     })
-    .catch(function (error) { return console.error('error: ', error); });
+    .catch(err => console.error('error: ', err));
 }
 
 function goBack() {
@@ -111,6 +114,7 @@ function sendEditGrade() {
         window.alert("letters detected in the grade or in the grade weight");
         return false;
     };
+
     let data = {
         subject: document.title,
         grade: grade,
@@ -119,6 +123,7 @@ function sendEditGrade() {
         type: document.getElementById('type').value,
         grade_id: window.global_id
     };
+
     console.log(data)
     fetch("/editGrade", {
         method: 'POST',
@@ -130,9 +135,10 @@ function sendEditGrade() {
     .then(res => {return res.json()})
     .then(data => {
         if (data.ok) {
-            window.alert("grade modified successfully");
+            window.alert(data.message);
+            window.location.reload();
         } else {
-            window.alert("error while editing a grade, try again!");
+            window.alert(data.message);
         }
     })
 }

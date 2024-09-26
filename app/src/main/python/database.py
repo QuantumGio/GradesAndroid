@@ -136,18 +136,18 @@ def return_grade_proportions() -> dict:
 def return_average_by_date() -> list:
     '''funcion that returns averages by date'''
     command = """
-        WITH cumulative_grades AS (
-        SELECT date, grade, weight
-        FROM grades
-        ORDER BY date
+    WITH cumulative_grades AS (
+    SELECT date, grade, weight
+    FROM grades
+    ORDER BY date
     ),
     cumulative_averages AS (
-        SELECT date,
-               (SELECT SUM(cg2.grade * cg2.weight) / SUM(cg2.weight)
-                FROM cumulative_grades cg2
-                WHERE cg2.date <= cg1.date) AS average_grade
-        FROM cumulative_grades cg1
-        GROUP BY date
+    SELECT date,
+            (SELECT SUM(cg2.grade * cg2.weight) / SUM(cg2.weight)
+            FROM cumulative_grades cg2
+            WHERE cg2.date <= cg1.date) AS average_grade
+    FROM cumulative_grades cg1
+    GROUP BY date
     )
     SELECT date, average_grade
     FROM cumulative_averages
@@ -236,9 +236,25 @@ def return_general_average() -> str:
         return 'N/A'
 
 @create_database
-def delete_grade(id):
+def delete_grade(id_: str):
     '''function that deletes a grade gived its id'''
-    command = f"DELETE FROM grades WHERE id = {int(id[13:])};"
+    command = f"DELETE FROM grades WHERE id = {int(id_[13:])};"
+    try:
+        connection = sqlite3.connect(path)
+        cursor = connection.cursor()
+        cursor.execute(command)
+        connection.commit()
+        connection.close()
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+@create_database
+def edit_grade(data: dict):
+    '''function that edits a grade given its id'''
+    command = f"UPDATE grades SET subject_name = '{data['subject']}', grade = '{data['grade']}', date = '{data['date']}', weight = '{data['grade_weight']}', type = '{data['type']}' WHERE id = '{int(data['grade_id'])}'"
     try:
         connection = sqlite3.connect(path)
         cursor = connection.cursor()

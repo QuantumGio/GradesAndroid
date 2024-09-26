@@ -3,86 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/index/index.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <title>Grades | Home</title>
 </head>
 <body>
-<h1>GRADES</h1>
-<h3>General average: {{general_average}} -- General Average is made by the average of all existant grades</h3>
-<button id="add-subject-button" type="button">Add a subject</button>
-<div id="add-subject-section" class="add-subject-section" style="display: none;">
-    <form action="/" method="post">
-        <input type="text" id="subject" name="subject">
+<div class="page-content">
+    <div class="upper-section">
+        <h1>GRADES</h1>
+        <span id="settings" class="material-symbols-outlined" style="cursor: pointer; user-select:none">
+                settings
+            </span>
+    </div>
+
+    <div id="popup" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <br>
+            <h3>Periods settings</h3>
+            <label for="">1st period</label><br>
+            <label for="">Start date:</label>
+            <input type="date" name="start_date_first_period" id="start-date-first-period">
+
+            <label for="">End date:</label>
+            <input type="date" name="end_date_first_period" id="end-date-first-period">
+            <br>
+
+            <label for="">2nd Period</label><br>
+            <label for="">Start date:</label>
+            <input type="date" name="start_date_second_period" id="start-date-second-period">
+            <label for="">End date:</label>
+            <input type="date" name="end_date_first_period" id="end-date-second-period">
+        </div>
+    </div>
+
+    <h3>General average: {{general_average}} -- General Average is made by the average of all existent grades</h3>
+
+    <button id="add-subject-button" type="button">Add a subject</button>
+
+    <div id="add-subject-section" class="add-subject-section" style="display: none;">
+        <form action="/" method="post">
+            <input type="text" id="subject" name="subject">
+            <br>
+            <button type="submit">Add subject</button>
+        </form>
+    </div>
+
+    <h3>Subject List:</h3>
+    <div class="subject-list">
+        {%for subject, average in averages_list%}
+        <button onclick="redirect(event.target.id)" id="{{subject}}" type="button">{{subject}}</button>
+        <label for="">Average: {{average}}</label>
         <br>
-        <button type="submit">Add subject</button>
-    </form>
+        {% endfor %}
+    </div>
+    <div class="last-grade"></div>
+
+    <h3>Average grade during time</h3>
+    <div>
+        <canvas id="average-grade-over-time" width="800" height="400"></canvas>
+    </div>
+    <span data-value="{{general_average}}" id="general-average"></span>
+
+    <h3>Grades Distribution: How many times a grade appears</h3>
+    <div class="grade-graph-bar">
+        <canvas id="bar-grade-graph" width="400px" height="200px"></canvas>
+    </div>
+    <span data-value="{{ grade_bar}}" id="grade-bar"></span>
 </div>
-<h3>Subject List:</h3>
-<div class="subject-list">
-    {%for subject, average in averages_list%}
-    <button onclick="redirect(event.target.id)" id="{{subject}}" type="button">{{subject}}</button>
-    <label for="">Average: {{average}}</label>
-    <br>
-    {% endfor %}
-</div>
-<div class="last-grade"></div>
 
-<h3>Average grade during time</h3>
-<div>
-    <canvas id="average-grade-over-time" width="800" height="400"></canvas>
-</div>
-<span data-value="{{general_average}}" id="general-average"></span>
 
-<h3>Grades Distribution: How many times a grade appears</h3>
-<div class="grade-graph-bar">
-    <canvas id="bar-grade-graph" width="400px" height="200px"></canvas>
-</div>
-<span data-value="{{ grade_bar}}" id="grade-bar"></span>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        gradesDistribution();
-    });
-
-    function gradesDistribution() {
-        let grades_dict = JSON.parse(document.getElementById("grade-bar").dataset.value);
-
-        var ctx = document.getElementById('bar-grade-graph').getContext('2d');
-        const config = {
-            type: 'bar',
-            data: {
-                labels: Object.keys(grades_dict),
-                datasets: [{
-                    label: 'Grade Proportions',
-                    data: Object.values(grades_dict),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        };
-        var barGraph = new Chart(ctx, config);
-    }
-    document.getElementById('bar-grade-graph').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-    });
-
-    document.getElementById('average-grade-over-time').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-    });
-
-</script>
 </body>
 <script src="{{ url_for('static', filename='/index/index.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
