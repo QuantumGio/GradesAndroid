@@ -4,75 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='/index/index.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Grades | Home</title>
 </head>
 <body>
-<div class="page-content">
-    <div class="upper-section">
-        <h1>GRADES</h1>
-        <span id="settings" class="material-symbols-outlined" style="cursor: pointer; user-select:none">
-                settings
-            </span>
-    </div>
+    <main id="main-content"></main>
 
-    <div id="popup" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <br>
-            <h3>Periods settings</h3>
-            <label for="">1st period</label><br>
-            <label for="">Start date:</label>
-            <input type="date" name="start_date_first_period" id="start-date-first-period">
-
-            <label for="">End date:</label>
-            <input type="date" name="end_date_first_period" id="end-date-first-period">
-            <br>
-
-            <label for="">2nd Period</label><br>
-            <label for="">Start date:</label>
-            <input type="date" name="start_date_second_period" id="start-date-second-period">
-            <label for="">End date:</label>
-            <input type="date" name="end_date_first_period" id="end-date-second-period">
+    <nav class="horizontal-nav">
+        <div class="nav-item active" id="home" onclick="loadContent(event.target.id)">
+            <div class="icon-wrapper" id="home">
+                <span class="material-symbols-rounded" id="home">
+                    home
+                </span>
+            </div>
+            <span class="nav-label">Home</span>
         </div>
-    </div>
-
-    <h3>General average: {{general_average}} -- General Average is made by the average of all existent grades</h3>
-
-    <button id="add-subject-button" type="button">Add a subject</button>
-
-    <div id="add-subject-section" class="add-subject-section" style="display: none;">
-        <form action="/" method="post">
-            <input type="text" id="subject" name="subject">
-            <br>
-            <button type="submit">Add subject</button>
-        </form>
-    </div>
-
-    <h3>Subject List:</h3>
-    <div class="subject-list">
-        {%for subject, average in averages_list%}
-        <button onclick="redirect(event.target.id)" id="{{subject}}" type="button">{{subject}}</button>
-        <label for="">Average: {{average}}</label>
-        <br>
-        {% endfor %}
-    </div>
-    <div class="last-grade"></div>
-
-    <h3>Average grade during time</h3>
-    <div>
-        <canvas id="average-grade-over-time" width="800" height="400"></canvas>
-    </div>
-    <span data-value="{{general_average}}" id="general-average"></span>
-
-    <h3>Grades Distribution: How many times a grade appears</h3>
-    <div class="grade-graph-bar">
-        <canvas id="bar-grade-graph" width="400px" height="200px"></canvas>
-    </div>
-    <span data-value="{{ grade_bar}}" id="grade-bar"></span>
-</div>
-
-
+        <div class="nav-item" id="stats" onclick="loadContent(event.target.id)">
+            <div class="icon-wrapper" id="stats">
+                <span class="material-symbols-rounded" id="stats">
+                    monitoring
+                </span>
+            </div>
+            <span class="nav-label">Charts</span>
+        </div>
+        <div class="nav-item" id="settings" onclick="loadContent(event.target.id)">
+            <div class="icon-wrapper" id="settings">
+                <span class="material-symbols-rounded" id="settings">
+                    settings
+                </span>
+            </div>
+            <span class="nav-label">Settings</span>
+        </div>
+    </nav>
+    
 </body>
 <script src="{{ url_for('static', filename='/index/index.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

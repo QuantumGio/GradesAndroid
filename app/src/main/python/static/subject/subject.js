@@ -21,12 +21,11 @@ document.addEventListener("DOMContentLoaded", function () {
             var data = {
                 subject: document.title,
                 grade: grade,
-                code: '002',
                 date: document.getElementById("grade-date").value,
                 grade_weight: gradeWeight,
                 type: document.getElementById('type').value
             };
-            fetch("http://127.0.0.1:5000/" + document.title, {
+            fetch("/addGrade", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,16 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
 function showSection(button) {
     document.getElementById("add-grade-section").style.display = 'flex';
     button.style.display = 'none';
-}
-;
+};
 
 function deleteGrade(id) {
     var data = {
-        code: '004',
         id: id
     };
 
-    fetch("http://127.0.0.1:5000/" + document.title, {
+    fetch("/deleteGrade", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
