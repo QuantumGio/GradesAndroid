@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url(../settings/variables.css);
 
 * {
     font-family: 'poppins', sans-serif;
+}
+
+button {
+    background-color: var(--primary-color);
+    margin: 2px;
+    border-radius: 20px;
+    border: 0;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+td, th {
+    padding: 5px;
 }

@@ -58,7 +58,7 @@ def return_index():
 @app.route("/index-content", methods=['GET'])
 def return_content():
     '''return home page content'''
-    return render_template("index-content.html", averages_list=database.return_averages(), subjects_list = database.list_subjects(), general_average=database.return_general_average()), 200
+    return render_template("index-content.html", averages_list=database.return_averages(), subjects_list = database.list_subjects(), general_average=database.return_general_average(), general_average_rounded=database.return_average_by_date()), 200
 
 @app.route("/addSubject", methods=['POST'])
 def add_subject():
@@ -83,8 +83,8 @@ def redirect():
 @app.route("/getAverageByDate", methods=['GET'])
 def get_average_by_date():
     '''get request to return the average by date'''
-    data = database.return_average_by_date()
-    return jsonify(data), 200
+    data, data_rounded = database.return_average_by_date()
+    return jsonify({'data': data, 'data_rounded': data_rounded}), 200
 
 
 @app.route("/stats", methods=['GET'])

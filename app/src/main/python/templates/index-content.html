@@ -1,11 +1,34 @@
 <h1>GRADES</h1>
 
-<div class="subject-list">
-    <div class="subject-section">
-        <label id="average-label" for="">General average</label>
-        <p id="average-label">{{general_average}}</p>
+<div class="averages-section">
+    <div class="averages">
+        <div class="general">
+            <label id="average-label" for="">General average</label>
+            <p id="average-label">{{general_average}}</p>
+        </div>
+        <div class="rounded">
+            <label for="">General average rounded</label>
+            <p>{{general_average_rounded[1][-1]['average_grade'] | round(2)}}</p>
+        </div>
+        <div class="predicted">
+            <label for="">General average predicted</label>
+            <p>{{general_average_predicted}}</p>
+        </div>
     </div>
 </div>
+
+<h3>Your subjects</h3>
+
+<div class="subject-list">
+    {%for subject, average in averages_list%}
+    <div class="subject-section" id="{{subject}}" onclick="redirect(event.target.id)">
+        <label id="{{subject}}" onclick="redirect(event.target.id)" for="">{{subject}}</label>
+        <p id="{{subject}}"" onclick="redirect(event.target.id)" >{{average}}</p>
+    </div>
+
+    {% endfor %}
+</div>
+<div class="last-grade"></div>
 
 <h3>Add a subject</h3>
 
@@ -19,16 +42,3 @@
         <button type="submit">Add subject</button>
     </form>
 </div>
-
-<h3>Your subjects</h3>
-
-<div class="subject-list">
-    {%for subject, average in averages_list%}
-        <div class="subject-section" id="{{subject}}" onclick="redirect(event.target.id)">
-            <label id="{{subject}}" onclick="redirect(event.target.id)" for="">{{subject}}</label>
-            <p id="{{subject}}"" onclick="redirect(event.target.id)" >{{average}}</p>
-        </div>
-        <br>
-    {% endfor %}
-</div>
-<div class="last-grade"></div>

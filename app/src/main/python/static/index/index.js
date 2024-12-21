@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error('Errore nel caricamento:', error));
 
     document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function() {
-            // Rimuovi lo stato attivo dall'icona precedente
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
             document.querySelector('.nav-item.active')?.classList.remove('active');
             this.classList.add('active');
         });
@@ -130,10 +130,14 @@ function loadContent(id) {
             })
             .then(response => response.json())
             .then(data => {
-            
-                const labels = data.map(item => item.date);
-                const averages = data.map(item => item.average_grade); 
-            
+
+                const dataMain = data.data;
+                const roundedData = data.data_rounded;
+
+                const labels = dataMain.map(item => item.date);
+                const mainAverages = dataMain.map(item => item.average_grade)
+                const roundedAverages = roundedData.map(item => item.average_grade);
+
                 const ctx = document.getElementById('average-grade-over-time').getContext('2d');
                 new Chart(ctx, {
                     type: 'line',
@@ -141,10 +145,18 @@ function loadContent(id) {
                         labels: labels,
                         datasets: [{
                             label: 'Average Grade',
-                            data: averages,
+                            data: mainAverages,
                             fill: false,
                             borderColor: '#a37cf7',
                             backgroundColor: '#a37cf7',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Rounded Average Grade',
+                            data: roundedAverages,
+                            fill: false,
+                            borderColor: '#f774a3',
+                            backgroundColor: '#f774a3',
                             tension: 0.1
                         }]
                     },
